@@ -12,8 +12,9 @@ public class MainMenuController : MonoBehaviour
 
     private void Start()
     {
-        // Esto reproduce la música del menú
+        // Esto reproduce la música del menú y el Juego
         AudioManager.Instance?.PlayMenuMusic();
+        AudioManager.Instance?.PlayGameplayMusic();
 
         // Esto muestra el panel principal al abrir
         if (mainPanel != null) mainPanel.SetActive(true);
