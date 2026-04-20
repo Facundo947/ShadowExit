@@ -52,9 +52,11 @@ public class MainMenuController : MonoBehaviour
         AudioManager.Instance?.PlayButtonClick();
 
         Debug.Log("[MainMenuController] Saliendo del juego...");
+        // Esto cierra el juego fuera del editor.
         Application.Quit();
 
 #if UNITY_EDITOR
+        // Solo en el Unity Editor, detiene el modo Play.
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
     }
