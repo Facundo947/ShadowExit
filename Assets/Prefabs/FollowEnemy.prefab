@@ -169,6 +169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd7d4195b44d97443a87ea677e147f1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FollowEnemy
-  speed: 3
+  speed: 1
   minDistance: 1
   player: {fileID: 1118321382612150452, guid: 7b012fcd3ba0b82408f122ff622dc686, type: 3}

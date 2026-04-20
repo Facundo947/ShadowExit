@@ -6,6 +6,8 @@ public class NormalEnemyFactory : EnemyFactoryBase
     [Header("Prefabs")]
     [SerializeField] private GameObject followEnemyPrefab;
     [SerializeField] private GameObject patrolEnemyPrefab;
+    [Header("Damage")]
+    [SerializeField] private int contactDamage = 1;
 
     public override GameObject CreateFollowEnemy(Vector3 position, Transform followTarget)
     {
@@ -22,6 +24,8 @@ public class NormalEnemyFactory : EnemyFactoryBase
         {
             followEnemy.SetTarget(followTarget);
         }
+
+        EnsureContactDamage(enemy);
 
         return enemy;
     }
@@ -42,6 +46,19 @@ public class NormalEnemyFactory : EnemyFactoryBase
             patrolEnemy.SetTarget(followTarget);
         }
 
+        EnsureContactDamage(enemy);
+
         return enemy;
+    }
+
+    private void EnsureContactDamage(GameObject enemy)
+    {
+        EnemyContactDamage contactDamageComponent = enemy.GetComponent<EnemyContactDamage>();
+        if (contactDamageComponent == null)
+        {
+            contactDamageComponent = enemy.AddComponent<EnemyContactDamage>();
+        }
+
+        contactDamageComponent.SetDamage(contactDamage);
     }
 }
