@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa6d2e9cbc75c291b0f2b80763add80, type: 3}
+  m_Name: Normal Enemy Factory SO
+  m_EditorClassIdentifier: Assembly-CSharp::AbstractFactory.AbstractEnemyFactorySO
+  enemyEntries:
+  - {fileID: 11400000, guid: 6714f4b42b43ca48f9cf3d5b6b1c9500, type: 2}
+  - {fileID: 11400000, guid: 5554818da98f6c4ba91d6049d0d2faf3, type: 2}
+  - {fileID: 11400000, guid: 20e7dc7d89159129c8a5e72214b9923b, type: 2}

@@ -2,17 +2,24 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private EnemyFactory enemyFactory;
+    [SerializeField] private EnemyFactoryBase enemyFactory;
     [SerializeField] private EnemyType enemyType;
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private int spawnCount = 1;
-    [SerializeField] private Transform followTarget;
+    [SerializeField] private Transform followTargetOverride;
+
+    private Transform followTarget;
+
+    private void Awake()
+    {
+        followTarget = ResolveFollowTarget();
+    }
 
     private void Start()
     {
         if (enemyFactory == null)
         {
-            Debug.LogError("EnemySpawner: falta asignar un EnemyFactory.", this);
+            Debug.LogError("EnemySpawner: falta asignar una EnemyFactoryBase.", this);
             return;
         }
 
@@ -75,22 +82,47 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemyAt(Vector3 spawnPosition)
     {
-        GameObject enemy = enemyFactory.CreateEnemy(enemyType, spawnPosition);
+        GameObject enemy = CreateEnemy(spawnPosition);
         if (enemy == null)
         {
             return;
         }
+    }
 
-        FollowEnemy followEnemy = enemy.GetComponent<FollowEnemy>();
-        if (followEnemy != null && followTarget != null)
+    private GameObject CreateEnemy(Vector3 spawnPosition)
+    {
+        switch (enemyType)
         {
-            followEnemy.SetTarget(followTarget);
+            case EnemyType.Follow:
+                return enemyFactory.CreateFollowEnemy(spawnPosition, followTarget);
+            case EnemyType.Patrol:
+                return enemyFactory.CreatePatrolEnemy(spawnPosition, followTarget);
+            default:
+                Debug.LogError($"EnemySpawner: tipo de enemigo no soportado ({enemyType}).", this);
+                return null;
+        }
+    }
+
+    private Transform ResolveFollowTarget()
+    {
+        if (followTargetOverride != null)
+        {
+            return followTargetOverride;
         }
 
-        PatrollEnemy patrollEnemy = enemy.GetComponent<PatrollEnemy>();
-        if (patrollEnemy != null && followTarget != null)
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
         {
-            patrollEnemy.SetTarget(followTarget);
+            return player.transform;
         }
+
+        PlayerHealth playerHealth = FindFirstObjectByType<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            return playerHealth.transform;
+        }
+
+        Debug.LogWarning("EnemySpawner: no se encontro un objetivo para seguir. Usa el tag Player o asigna un override.", this);
+        return null;
     }
 }
