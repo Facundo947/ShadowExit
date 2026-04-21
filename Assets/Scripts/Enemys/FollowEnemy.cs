@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class FollowEnemy : MonoBehaviour
 {
     [SerializeField] private float speed = 3f;
@@ -8,12 +9,21 @@ public class FollowEnemy : MonoBehaviour
     [FormerlySerializedAs("Player")]
     [SerializeField] private Transform player;
 
+    private Rigidbody2D rb;
+    private Vector2 targetPosition;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        targetPosition = rb.position;
+    }
+
     public void SetTarget(Transform target)
     {
         player = target;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (player == null)
         {
@@ -22,7 +32,8 @@ public class FollowEnemy : MonoBehaviour
 
         if (Vector2.Distance(transform.position, player.position) > minDistance)
         {
-            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+            targetPosition = Vector2.MoveTowards(rb.position, player.position, speed * Time.fixedDeltaTime);
+            rb.MovePosition(targetPosition);
             return;
         }
 

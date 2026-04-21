@@ -14,17 +14,12 @@ public class Movement : MonoBehaviour
     private Vector2 facingDirection = Vector2.right;
 
     public Vector2 FacingDirection => facingDirection;
+    public Vector2 MoveInput => moveInput;
+    public bool HasMoveInput => moveInput.sqrMagnitude > 0.001f;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-    }
-
-
-    
-    void FixedUpdate()
-    {
-        rb.MovePosition(rb.position + moveInput.normalized * moveSpeed *  Time.deltaTime);
     }
 
      private void OnEnable()
@@ -61,5 +56,10 @@ public class Movement : MonoBehaviour
     private void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
         moveInput = Vector2.zero;
+    }
+
+    public void TickMovement(float deltaTime)
+    {
+        rb.MovePosition(rb.position + moveInput.normalized * moveSpeed * deltaTime);
     }
 }

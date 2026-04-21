@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PatrollEnemy : MonoBehaviour
 {
    [FormerlySerializedAs("Speed")]
@@ -16,13 +17,19 @@ public class PatrollEnemy : MonoBehaviour
 
     private int currentWaypoint;
     private bool isWaiting;
+    private Rigidbody2D rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     public void SetTarget(Transform target)
     {
         player = target;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (ShouldChasePlayer())
         {
@@ -37,7 +44,8 @@ public class PatrollEnemy : MonoBehaviour
 
         if (transform.position != waypoints[currentWaypoint].position)
         {
-            transform.position = Vector2.MoveTowards(transform.position, waypoints[currentWaypoint].position, speed * Time.deltaTime);
+            Vector2 nextPosition = Vector2.MoveTowards(rb.position, waypoints[currentWaypoint].position, speed * Time.fixedDeltaTime);
+            rb.MovePosition(nextPosition);
         }
         else if (!isWaiting)
         {
@@ -62,7 +70,8 @@ public class PatrollEnemy : MonoBehaviour
             return;
         }
 
-        transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+        Vector2 nextPosition = Vector2.MoveTowards(rb.position, player.position, speed * Time.fixedDeltaTime);
+        rb.MovePosition(nextPosition);
     }
 
     private IEnumerator Wait()

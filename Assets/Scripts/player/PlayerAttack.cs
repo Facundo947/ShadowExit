@@ -18,22 +18,7 @@ public class PlayerAttack : MonoBehaviour
         playerHealth = GetComponent<PlayerHealth>();
     }
 
-    private void Update()
-    {
-        if (!CanAttack())
-        {
-            return;
-        }
-
-        if (!WasAttackPressedThisFrame())
-        {
-            return;
-        }
-
-        PerformAttack();
-    }
-
-    private bool CanAttack()
+    public bool CanAttack()
     {
         if (playerHealth != null && playerHealth.IsDead)
         {
@@ -43,7 +28,7 @@ public class PlayerAttack : MonoBehaviour
         return Time.time >= lastAttackTime + attackCooldown;
     }
 
-    private bool WasAttackPressedThisFrame()
+    public bool WasAttackPressedThisFrame()
     {
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
@@ -63,8 +48,13 @@ public class PlayerAttack : MonoBehaviour
         return false;
     }
 
-    private void PerformAttack()
+    public void PerformAttack()
     {
+        if (!CanAttack())
+        {
+            return;
+        }
+
         lastAttackTime = Time.time;
 
         Vector2 attackDirection = movement != null ? movement.FacingDirection : Vector2.right;

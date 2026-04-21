@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using ShadowExit.PlayerStateSystem;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class PlayerHealth : MonoBehaviour
     private Rigidbody2D rb;
     private Collider2D[] colliders;
 
+    public event System.Action Damaged;
+    public event System.Action Died;
+
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
     public bool IsDead => isDead;
@@ -22,6 +26,7 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth = maxHealth;
         EnsurePlayerAttack();
+        EnsurePlayerBrain();
         movement = GetComponent<Movement>();
         rb = GetComponent<Rigidbody2D>();
         colliders = GetComponents<Collider2D>();
@@ -41,6 +46,7 @@ public class PlayerHealth : MonoBehaviour
 
         currentHealth = Mathf.Max(0, currentHealth - damage);
         lastDamageTime = Time.time;
+        Damaged?.Invoke();
 
         Debug.Log($"Player recibio {damage} de dano. Vida restante: {currentHealth}", this);
 
@@ -58,6 +64,7 @@ public class PlayerHealth : MonoBehaviour
         }
 
         isDead = true;
+        Died?.Invoke();
         Debug.Log("Player murio.", this);
 
         if (movement != null)
@@ -92,6 +99,14 @@ public class PlayerHealth : MonoBehaviour
         if (GetComponent<PlayerAttack>() == null)
         {
             gameObject.AddComponent<PlayerAttack>();
+        }
+    }
+
+    private void EnsurePlayerBrain()
+    {
+        if (GetComponent<PlayerBrain>() == null)
+        {
+            gameObject.AddComponent<PlayerBrain>();
         }
     }
 }
