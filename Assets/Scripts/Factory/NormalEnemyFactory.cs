@@ -6,6 +6,8 @@ public class NormalEnemyFactory : EnemyFactoryBase
     [Header("Prefabs")]
     [SerializeField] private GameObject followEnemyPrefab;
     [SerializeField] private GameObject patrolEnemyPrefab;
+    [Header("Health")]
+    [SerializeField] private int enemyMaxHealth = 1;
     [Header("Damage")]
     [SerializeField] private int contactDamage = 1;
 
@@ -26,6 +28,7 @@ public class NormalEnemyFactory : EnemyFactoryBase
         }
 
         EnsureContactDamage(enemy);
+        EnsureEnemyHealth(enemy);
 
         return enemy;
     }
@@ -47,6 +50,7 @@ public class NormalEnemyFactory : EnemyFactoryBase
         }
 
         EnsureContactDamage(enemy);
+        EnsureEnemyHealth(enemy);
 
         return enemy;
     }
@@ -60,5 +64,16 @@ public class NormalEnemyFactory : EnemyFactoryBase
         }
 
         contactDamageComponent.SetDamage(contactDamage);
+    }
+
+    private void EnsureEnemyHealth(GameObject enemy)
+    {
+        EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
+        if (enemyHealth == null)
+        {
+            enemyHealth = enemy.AddComponent<EnemyHealth>();
+        }
+
+        enemyHealth.SetMaxHealth(enemyMaxHealth);
     }
 }

@@ -11,6 +11,9 @@ public class Movement : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
+    private Vector2 facingDirection = Vector2.right;
+
+    public Vector2 FacingDirection => facingDirection;
 
     private void Awake()
     {
@@ -48,6 +51,11 @@ public class Movement : MonoBehaviour
     private void OnMovePerfomed(InputAction.CallbackContext ctx)
     {
         moveInput = ctx.ReadValue<Vector2>();
+
+        if (moveInput.sqrMagnitude > 0.001f)
+        {
+            facingDirection = moveInput.normalized;
+        }
     }
 
     private void OnMoveCanceled(InputAction.CallbackContext ctx)

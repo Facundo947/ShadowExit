@@ -116,7 +116,7 @@ public class EnemySpawner : MonoBehaviour
             return player.transform;
         }
 
-        PlayerHealth playerHealth = FindFirstObjectByType<PlayerHealth>();
+        PlayerHealth playerHealth = FindAnyObjectByType<PlayerHealth>();
         if (playerHealth != null)
         {
             return playerHealth.transform;

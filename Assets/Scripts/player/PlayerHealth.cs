@@ -21,6 +21,7 @@ public class PlayerHealth : MonoBehaviour
     private void Awake()
     {
         currentHealth = maxHealth;
+        EnsurePlayerAttack();
         movement = GetComponent<Movement>();
         rb = GetComponent<Rigidbody2D>();
         colliders = GetComponents<Collider2D>();
@@ -84,5 +85,13 @@ public class PlayerHealth : MonoBehaviour
     private void RestartScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private void EnsurePlayerAttack()
+    {
+        if (GetComponent<PlayerAttack>() == null)
+        {
+            gameObject.AddComponent<PlayerAttack>();
+        }
     }
 }

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5843397765135437639}
   - component: {fileID: 4718619994798438986}
   - component: {fileID: 7108928846523271611}
+  - component: {fileID: 1595760037423831428}
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Player
@@ -211,3 +212,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 3
   invulnerabilityTime: 0.5
+  deathRestartDelay: 1
+--- !u!114 &1595760037423831428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8884980168762984226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3966ddcfb4edc349a44e44346b704e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  attackDamage: 1
+  attackRange: 0.9
+  attackRadius: 0.5
+  attackCooldown: 0.35
