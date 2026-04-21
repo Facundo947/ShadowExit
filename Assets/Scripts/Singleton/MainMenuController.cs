@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class MainMenuController : MonoBehaviour
 {
     [Header("Escenas")]
-    [SerializeField] private string gameplaySceneName = "Level";
+    [SerializeField] private string gameplaySceneName = "Level1 1";
 
     [Header("Panels")]
     [SerializeField] private GameObject mainPanel;
