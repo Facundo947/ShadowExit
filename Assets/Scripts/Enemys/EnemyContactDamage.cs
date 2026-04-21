@@ -4,6 +4,11 @@ public class EnemyContactDamage : MonoBehaviour
 {
     [SerializeField] private int damage = 1;
 
+    public void SetDamage(int newDamage)
+    {
+        damage = Mathf.Max(1, newDamage);
+    }
+
     private void OnCollisionStay2D(Collision2D collision)
     {
         DealDamage(collision.gameObject);
