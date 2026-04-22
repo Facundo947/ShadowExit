@@ -1,5 +1,7 @@
 namespace ShadowExit.PlayerStateSystem
 {
+   
+    //interfaz de los estados
     public abstract class State<T>
     {
         protected T target;

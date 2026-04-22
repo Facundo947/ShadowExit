@@ -18,6 +18,7 @@ namespace ShadowExit.PlayerStateSystem
         public float HurtStateDuration => hurtStateDuration;
         public bool HasMoveInput => Movement != null && Movement.HasMoveInput;
 
+        // El brain es el contexto del patron State: guarda y cambia el estado actual del player.
         private readonly Dictionary<PlayerStateKey, State<PlayerBrain>> allStates = new();
         private State<PlayerBrain> currentState;
 
@@ -75,6 +76,7 @@ namespace ShadowExit.PlayerStateSystem
                 return;
             }
 
+            // Todas las transiciones pasan por aca para asegurar salida, entrada y log consistente.
             string previousStateName = currentState != null ? currentState.GetType().Name : "None";
             currentState?.OnExit();
             currentState = newState;
@@ -84,6 +86,7 @@ namespace ShadowExit.PlayerStateSystem
 
         private void InitializeStates()
         {
+            // Se registra una sola instancia por estado para reutilizarla durante toda la partida.
             allStates.Clear();
             allStates.Add(PlayerStateKey.Idle, new PlayerIdleState(this));
             allStates.Add(PlayerStateKey.Move, new PlayerMoveState(this));

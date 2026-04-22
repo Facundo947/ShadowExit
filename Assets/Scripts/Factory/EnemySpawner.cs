@@ -5,6 +5,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private EnemyFactoryBase enemyFactory;
     [SerializeField] private EnemyType enemyType;
     [SerializeField] private Transform[] spawnPoints;
+    // Estos puntos son exclusivos del enemigo Patrol y marcan el recorrido fijo en escena.
     [SerializeField] private Transform[] patrolWaypoints;
     [SerializeField] private Transform followTargetOverride;
 
@@ -27,6 +28,7 @@ public class EnemySpawner : MonoBehaviour
 
         if (validSpawnPoints.Length == 0)
         {
+            // Si no hay puntos configurados, usa la posicion del propio spawner como fallback.
             SpawnEnemyAt(transform.position);
             return;
         }
@@ -37,6 +39,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    //limpiamos el arreglo del spawn
     private Transform[] GetValidSpawnPoints()
     {
         if (spawnPoints == null || spawnPoints.Length == 0)
@@ -85,6 +88,7 @@ public class EnemySpawner : MonoBehaviour
 
     private GameObject CreateEnemy(Vector3 spawnPosition)
     {
+        // El spawner delega la creacion concreta a la Abstract Factory.
         switch (enemyType)
         {
             case EnemyType.Follow:
@@ -104,6 +108,7 @@ public class EnemySpawner : MonoBehaviour
             return followTargetOverride;
         }
 
+        // Primero intenta con el tag para evitar depender de referencias manuales en inspector.
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {

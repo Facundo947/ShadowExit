@@ -19,6 +19,7 @@ public class NormalEnemyFactory : EnemyFactoryBase
     [Header("Damage")]
     [SerializeField] private int contactDamage = 1;
 
+    //verifica que el prefab este asignado
     public override GameObject CreateFollowEnemy(Vector3 position, Transform followTarget)
     {
         if (followEnemyPrefab == null)
@@ -29,6 +30,7 @@ public class NormalEnemyFactory : EnemyFactoryBase
 
         GameObject enemy = Instantiate(followEnemyPrefab, position, Quaternion.identity);
 
+        // La factory no solo instancia: tambien deja listo al enemigo para jugar.
         EnsureContactDamage(enemy);
         EnsureEnemyHealth(enemy);
         ConfigureFollowStrategy(enemy, followTarget);
@@ -60,10 +62,11 @@ public class NormalEnemyFactory : EnemyFactoryBase
         {
             contactDamageComponent = enemy.AddComponent<EnemyContactDamage>();
         }
-
+        //asigna daño configurado en la factory
         contactDamageComponent.SetDamage(contactDamage);
     }
 
+    //busca el componente de la hp, si no tiene se le agrega
     private void EnsureEnemyHealth(GameObject enemy)
     {
         EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
@@ -86,6 +89,7 @@ public class NormalEnemyFactory : EnemyFactoryBase
             return;
         }
 
+        // Strategy para perseguir manteniendo una distancia minima al objetivo.
         mover.SetStrategy(new FollowMovementStrategy(enemy.transform, rb, followSpeed, followTarget, followMinDistance));
     }
 
@@ -100,6 +104,7 @@ public class NormalEnemyFactory : EnemyFactoryBase
             return;
         }
 
+        // Strategy para patrullar por waypoints y perseguir si el jugador entra en rango.
         mover.SetStrategy(new PatrolMovementStrategy(
             enemy.transform,
             rb,

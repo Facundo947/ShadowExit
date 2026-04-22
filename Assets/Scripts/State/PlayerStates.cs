@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace ShadowExit.PlayerStateSystem
 {
+    //los estados posibles
     public enum PlayerStateKey
     {
         Idle,
@@ -19,6 +20,7 @@ namespace ShadowExit.PlayerStateSystem
 
         public override void OnUpdate()
         {
+            // Desde idle solo decide si pasar a muerto, atacar o empezar a moverse.
             if (target.Health != null && target.Health.IsDead)
             {
                 target.ChangeState(PlayerStateKey.Dead);
@@ -70,6 +72,7 @@ namespace ShadowExit.PlayerStateSystem
 
         public override void OnFixedUpdate()
         {
+            // El movimiento real vive aca para mantener la fisica dentro del estado correspondiente.
             target.Movement?.TickMovement(Time.fixedDeltaTime);
         }
 
@@ -84,6 +87,7 @@ namespace ShadowExit.PlayerStateSystem
 
         public override void OnEnter()
         {
+            // Ataca una sola vez al entrar y luego espera un tiempo corto antes de volver al flujo normal.
             timer = target.AttackStateDuration;
             target.Attack?.PerformAttack();
         }
@@ -118,6 +122,7 @@ namespace ShadowExit.PlayerStateSystem
 
         public override void OnEnter()
         {
+            // Este estado funciona como una pausa breve de reaccion al recibir dano.
             timer = target.HurtStateDuration;
         }
 
