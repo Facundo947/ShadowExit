@@ -1,4 +1,5 @@
-    using UnityEngine;
+using UnityEngine;
+using ShadowExit.EnemyStrategySystem;
 
 [CreateAssetMenu(fileName = "NormalEnemyFactory", menuName = "Factory/Normal Enemy Factory")]
 public class NormalEnemyFactory : EnemyFactoryBase
@@ -6,6 +7,13 @@ public class NormalEnemyFactory : EnemyFactoryBase
     [Header("Prefabs")]
     [SerializeField] private GameObject followEnemyPrefab;
     [SerializeField] private GameObject patrolEnemyPrefab;
+    [Header("Movement")]
+    [SerializeField] private float followSpeed = 3f;
+    [SerializeField] private float followMinDistance = 1f;
+    [SerializeField] private float patrolSpeed = 3f;
+    [SerializeField] private float patrolWaitTime = 1.5f;
+    [SerializeField] private float patrolChaseRange = 3f;
+    [SerializeField] private float patrolStopDistance = 1f;
     [Header("Health")]
     [SerializeField] private int enemyMaxHealth = 1;
     [Header("Damage")]
@@ -21,19 +29,14 @@ public class NormalEnemyFactory : EnemyFactoryBase
 
         GameObject enemy = Instantiate(followEnemyPrefab, position, Quaternion.identity);
 
-        FollowEnemy followEnemy = enemy.GetComponent<FollowEnemy>();
-        if (followEnemy != null && followTarget != null)
-        {
-            followEnemy.SetTarget(followTarget);
-        }
-
         EnsureContactDamage(enemy);
         EnsureEnemyHealth(enemy);
+        ConfigureFollowStrategy(enemy, followTarget);
 
         return enemy;
     }
 
-    public override GameObject CreatePatrolEnemy(Vector3 position, Transform followTarget)
+    public override GameObject CreatePatrolEnemy(Vector3 position, Transform followTarget, Transform[] patrolWaypoints)
     {
         if (patrolEnemyPrefab == null)
         {
@@ -43,14 +46,9 @@ public class NormalEnemyFactory : EnemyFactoryBase
 
         GameObject enemy = Instantiate(patrolEnemyPrefab, position, Quaternion.identity);
 
-        PatrollEnemy patrolEnemy = enemy.GetComponent<PatrollEnemy>();
-        if (patrolEnemy != null && followTarget != null)
-        {
-            patrolEnemy.SetTarget(followTarget);
-        }
-
         EnsureContactDamage(enemy);
         EnsureEnemyHealth(enemy);
+        ConfigurePatrolStrategy(enemy, followTarget, patrolWaypoints);
 
         return enemy;
     }
@@ -75,5 +73,41 @@ public class NormalEnemyFactory : EnemyFactoryBase
         }
 
         enemyHealth.SetMaxHealth(enemyMaxHealth);
+    }
+
+    private void ConfigureFollowStrategy(GameObject enemy, Transform followTarget)
+    {
+        Rigidbody2D rb = enemy.GetComponent<Rigidbody2D>();
+        EnemyMover mover = enemy.GetComponent<EnemyMover>();
+
+        if (rb == null || mover == null)
+        {
+            Debug.LogWarning("NormalEnemyFactory: el prefab follow necesita Rigidbody2D y EnemyMover.", enemy);
+            return;
+        }
+
+        mover.SetStrategy(new FollowMovementStrategy(enemy.transform, rb, followSpeed, followTarget, followMinDistance));
+    }
+
+    private void ConfigurePatrolStrategy(GameObject enemy, Transform followTarget, Transform[] patrolWaypoints)
+    {
+        Rigidbody2D rb = enemy.GetComponent<Rigidbody2D>();
+        EnemyMover mover = enemy.GetComponent<EnemyMover>();
+
+        if (rb == null || mover == null)
+        {
+            Debug.LogWarning("NormalEnemyFactory: el prefab patrol necesita Rigidbody2D y EnemyMover.", enemy);
+            return;
+        }
+
+        mover.SetStrategy(new PatrolMovementStrategy(
+            enemy.transform,
+            rb,
+            patrolSpeed,
+            followTarget,
+            patrolWaypoints,
+            patrolChaseRange,
+            patrolStopDistance,
+            patrolWaitTime));
     }
 }
