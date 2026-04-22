@@ -5,7 +5,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private EnemyFactoryBase enemyFactory;
     [SerializeField] private EnemyType enemyType;
     [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private int spawnCount = 1;
+    [SerializeField] private Transform[] patrolWaypoints;
     [SerializeField] private Transform followTargetOverride;
 
     private Transform followTarget;
@@ -23,11 +23,6 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        if (spawnCount <= 0)
-        {
-            return;
-        }
-
         Transform[] validSpawnPoints = GetValidSpawnPoints();
 
         if (validSpawnPoints.Length == 0)
@@ -36,9 +31,8 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < spawnCount; i++)
+        foreach (Transform spawnPoint in validSpawnPoints)
         {
-            Transform spawnPoint = validSpawnPoints[i % validSpawnPoints.Length];
             SpawnEnemyAt(spawnPoint.position);
         }
     }
@@ -96,7 +90,7 @@ public class EnemySpawner : MonoBehaviour
             case EnemyType.Follow:
                 return enemyFactory.CreateFollowEnemy(spawnPosition, followTarget);
             case EnemyType.Patrol:
-                return enemyFactory.CreatePatrolEnemy(spawnPosition, followTarget);
+                return enemyFactory.CreatePatrolEnemy(spawnPosition, followTarget, patrolWaypoints);
             default:
                 Debug.LogError($"EnemySpawner: tipo de enemigo no soportado ({enemyType}).", this);
                 return null;

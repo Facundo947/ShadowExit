@@ -36,7 +36,7 @@ public class NormalEnemyFactory : EnemyFactoryBase
         return enemy;
     }
 
-    public override GameObject CreatePatrolEnemy(Vector3 position, Transform followTarget)
+    public override GameObject CreatePatrolEnemy(Vector3 position, Transform followTarget, Transform[] patrolWaypoints)
     {
         if (patrolEnemyPrefab == null)
         {
@@ -48,7 +48,7 @@ public class NormalEnemyFactory : EnemyFactoryBase
 
         EnsureContactDamage(enemy);
         EnsureEnemyHealth(enemy);
-        ConfigurePatrolStrategy(enemy, followTarget);
+        ConfigurePatrolStrategy(enemy, followTarget, patrolWaypoints);
 
         return enemy;
     }
@@ -89,7 +89,7 @@ public class NormalEnemyFactory : EnemyFactoryBase
         mover.SetStrategy(new FollowMovementStrategy(enemy.transform, rb, followSpeed, followTarget, followMinDistance));
     }
 
-    private void ConfigurePatrolStrategy(GameObject enemy, Transform followTarget)
+    private void ConfigurePatrolStrategy(GameObject enemy, Transform followTarget, Transform[] patrolWaypoints)
     {
         Rigidbody2D rb = enemy.GetComponent<Rigidbody2D>();
         EnemyMover mover = enemy.GetComponent<EnemyMover>();
@@ -100,32 +100,14 @@ public class NormalEnemyFactory : EnemyFactoryBase
             return;
         }
 
-        Transform[] waypoints = CollectChildWaypoints(enemy.transform);
         mover.SetStrategy(new PatrolMovementStrategy(
             enemy.transform,
             rb,
             patrolSpeed,
             followTarget,
-            waypoints,
+            patrolWaypoints,
             patrolChaseRange,
             patrolStopDistance,
             patrolWaitTime));
-    }
-
-    private Transform[] CollectChildWaypoints(Transform enemyTransform)
-    {
-        int childCount = enemyTransform.childCount;
-        if (childCount == 0)
-        {
-            return System.Array.Empty<Transform>();
-        }
-
-        Transform[] waypoints = new Transform[childCount];
-        for (int i = 0; i < childCount; i++)
-        {
-            waypoints[i] = enemyTransform.GetChild(i);
-        }
-
-        return waypoints;
     }
 }
