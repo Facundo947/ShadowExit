@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 8923801717684659269}
   - component: {fileID: 5082149285939352101}
   - component: {fileID: 6500159598248412061}
-  - component: {fileID: 3973514920623115414}
+  - component: {fileID: 9077585486106175895}
+  - component: {fileID: 9126732126228456960}
   m_Layer: 0
   m_Name: PatrollEnemy
   m_TagString: Untagged
@@ -157,7 +158,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &3973514920623115414
+--- !u!114 &9077585486106175895
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,12 +167,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 2686011264902269158}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1adfaff48c1aee44e82588bd242478dd, type: 3}
+  m_Script: {fileID: 11500000, guid: a4e337fc1d4f84948babb454eabb1808, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PatrollEnemy
-  speed: 3
-  waitTime: 1.5
-  chaseRange: 3
-  stopDistance: 1
-  waypoints: []
-  player: {fileID: 1118321382612150452, guid: 7b012fcd3ba0b82408f122ff622dc686, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMover
+--- !u!114 &9126732126228456960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2686011264902269158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fa0280232e617b459b59ab6c801063b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  maxHealth: 3
