@@ -18,12 +18,12 @@ namespace ShadowExit.EnemyStrategySystem
             {
                 return;
             }
-
+            //se deja de mover al alcanzarlo
             if (Vector2.Distance(transform.position, target.position) <= minDistance)
             {
                 return;
             }
-
+            // si se aleja lo persigue
             Vector2 nextPosition = Vector2.MoveTowards(rb.position, target.position, speed * deltaTime);
             rb.MovePosition(nextPosition);
         }
@@ -57,6 +57,7 @@ namespace ShadowExit.EnemyStrategySystem
 
         public override void Move(float deltaTime)
         {
+           //preguntamos a que rango estamos del player
             if (ShouldChaseTarget())
             {
                 ChaseTarget(deltaTime);
@@ -94,13 +95,14 @@ namespace ShadowExit.EnemyStrategySystem
                 return;
             }
 
+            //wp actual
             Transform currentTarget = waypoints[currentWaypoint];
             if (currentTarget == null)
             {
                 AdvanceWaypoint();
                 return;
             }
-
+            //si no llego, va hacia el
             if (Vector2.Distance(transform.position, currentTarget.position) > 0.05f)
             {
                 Vector2 nextPosition = Vector2.MoveTowards(rb.position, currentTarget.position, speed * deltaTime);
@@ -108,7 +110,7 @@ namespace ShadowExit.EnemyStrategySystem
                 waitTimer = 0f;
                 return;
             }
-
+            //espera en cada wp
             waitTimer += deltaTime;
             if (waitTimer >= waitTime)
             {
@@ -119,6 +121,8 @@ namespace ShadowExit.EnemyStrategySystem
 
         private void AdvanceWaypoint()
         {
+
+            //vuelve al principio
             currentWaypoint++;
             if (currentWaypoint >= waypoints.Length)
             {

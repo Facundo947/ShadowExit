@@ -2,6 +2,8 @@ using UnityEngine;
 
 namespace ShadowExit.EnemyStrategySystem
 {
+    //estructura para cualquier tipo de movimiento
+    //definimos base para las estrategias
     public abstract class EnemyMovementStrategy
     {
         protected readonly Transform transform;
