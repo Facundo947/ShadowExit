@@ -502,7 +502,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -116.55585}
+  m_AnchoredPosition: {x: 0, y: -175}
   m_SizeDelta: {x: 0, y: 130.1057}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &427533693
@@ -707,7 +707,6 @@ RectTransform:
   - {fileID: 610705504}
   - {fileID: 463848596}
   - {fileID: 2125607333}
-  - {fileID: 1125502079}
   m_Father: {fileID: 1137056330}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1151,7 +1150,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -393, y: -206}
+  m_AnchoredPosition: {x: -392.99994, y: -205.99998}
   m_SizeDelta: {x: 308.6423, y: 87.1468}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &956117600
@@ -1278,11 +1277,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 491846609}
+  m_Father: {fileID: 1137056330}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000015259, y: 335}
+  m_AnchoredPosition: {x: 0, y: 416.35}
   m_SizeDelta: {x: 601.5356, y: 76.4453}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1125502080
@@ -1483,6 +1482,7 @@ RectTransform:
   - {fileID: 427533692}
   - {fileID: 491846609}
   - {fileID: 86197419}
+  - {fileID: 1125502079}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2152,7 +2152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuController
   gameplaySceneName: Level1 1
   mainPanel: {fileID: 491846608}
-  settingsPanel: {fileID: 100000, guid: fdad9d952ae84cafb74c63f2e694d042, type: 3}
+  settingsPanel: {fileID: 86197418}
 --- !u!4 &1677107726
 Transform:
   m_ObjectHideFlags: 0
