@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using ShadowExit.PlayerStateSystem;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour, IPlayerHealthSubject
 {
     [SerializeField] private int maxHealth = 5;
     [SerializeField] private float invulnerabilityTime = 0.5f;
@@ -14,9 +15,7 @@ public class PlayerHealth : MonoBehaviour
     private Movement movement;
     private Rigidbody2D rb;
     private Collider2D[] colliders;
-
-    public event System.Action Damaged;
-    public event System.Action Died;
+    private readonly List<IPlayerHealthObserver> observers = new();
 
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
@@ -30,6 +29,27 @@ public class PlayerHealth : MonoBehaviour
         movement = GetComponent<Movement>();
         rb = GetComponent<Rigidbody2D>();
         colliders = GetComponents<Collider2D>();
+    }
+
+    public void RegisterObserver(IPlayerHealthObserver observer)
+    {
+        if (observer == null || observers.Contains(observer))
+        {
+            return;
+        }
+
+        observers.Add(observer);
+        observer.OnNotify(CreateNotification(PlayerHealthNotificationType.HealthChanged));
+    }
+
+    public void UnregisterObserver(IPlayerHealthObserver observer)
+    {
+        if (observer == null)
+        {
+            return;
+        }
+
+        observers.Remove(observer);
     }
 
     public void TakeDamage(int damage)
@@ -46,7 +66,8 @@ public class PlayerHealth : MonoBehaviour
 
         currentHealth = Mathf.Max(0, currentHealth - damage);
         lastDamageTime = Time.time;
-        Damaged?.Invoke();
+        NotifyObservers(CreateNotification(PlayerHealthNotificationType.HealthChanged));
+        NotifyObservers(CreateNotification(PlayerHealthNotificationType.Damaged));
 
         Debug.Log($"Player recibio {damage} de dano. Vida restante: {currentHealth}", this);
 
@@ -64,7 +85,7 @@ public class PlayerHealth : MonoBehaviour
         }
 
         isDead = true;
-        Died?.Invoke();
+        NotifyObservers(CreateNotification(PlayerHealthNotificationType.Died));
         Debug.Log("Player murio.", this);
 
         if (movement != null)
@@ -108,5 +129,18 @@ public class PlayerHealth : MonoBehaviour
         {
             gameObject.AddComponent<PlayerBrain>();
         }
+    }
+
+    public void NotifyObservers(PlayerHealthNotification notification)
+    {
+        foreach (IPlayerHealthObserver observer in observers)
+        {
+            observer.OnNotify(notification);
+        }
+    }
+
+    private PlayerHealthNotification CreateNotification(PlayerHealthNotificationType type)
+    {
+        return new PlayerHealthNotification(type, currentHealth, maxHealth);
     }
 }

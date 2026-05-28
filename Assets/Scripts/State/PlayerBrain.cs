@@ -6,7 +6,7 @@ namespace ShadowExit.PlayerStateSystem
     [RequireComponent(typeof(Movement))]
     [RequireComponent(typeof(PlayerAttack))]
     [RequireComponent(typeof(PlayerHealth))]
-    public class PlayerBrain : MonoBehaviour
+    public class PlayerBrain : MonoBehaviour, IPlayerHealthObserver
     {
         [SerializeField] private float attackStateDuration = 0.15f;
         [SerializeField] private float hurtStateDuration = 0.2f;
@@ -35,8 +35,7 @@ namespace ShadowExit.PlayerStateSystem
         {
             if (Health != null)
             {
-                Health.Damaged += HandleDamaged;
-                Health.Died += HandleDied;
+                Health.RegisterObserver(this);
             }
         }
 
@@ -49,8 +48,7 @@ namespace ShadowExit.PlayerStateSystem
         {
             if (Health != null)
             {
-                Health.Damaged -= HandleDamaged;
-                Health.Died -= HandleDied;
+                Health.UnregisterObserver(this);
             }
         }
 
@@ -95,17 +93,18 @@ namespace ShadowExit.PlayerStateSystem
             allStates.Add(PlayerStateKey.Dead, new PlayerDeadState(this));
         }
 
-        private void HandleDamaged()
+        public void OnNotify(PlayerHealthNotification notification)
         {
-            if (Health != null && !Health.IsDead)
+            if (notification.Type == PlayerHealthNotificationType.Damaged && Health != null && !Health.IsDead)
             {
                 ChangeState(PlayerStateKey.Hurt);
+                return;
             }
-        }
 
-        private void HandleDied()
-        {
-            ChangeState(PlayerStateKey.Dead);
+            if (notification.Type == PlayerHealthNotificationType.Died)
+            {
+                ChangeState(PlayerStateKey.Dead);
+            }
         }
     }
 }
